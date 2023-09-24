@@ -30,27 +30,45 @@ PARSER_END(RamParser)
 
 /* The regular expressions here will be skipped during lexical analysis. No
 tokens are constructed from the productions that are defined here. */
-/*SKIP : {
-
-
-}*/
+SKIP : {
+   " "
+   | "\t"
+   | "\n"
+}
 
 
 /* Insert the regular expressions for comments here. Special tokens do not
 interact in the parsing process, but can be accessed from the parser. */
-/*SPECIAL_TOKEN: {
-
-
-}*/
+SPECIAL_TOKEN:
+{
+     <MULTILINE_COMMENT: "/*" (["a"-"z"] | ["0"-"9"])* "*/">
+   | <SINGLELINE_COMMENT: "//" (["a"-"z"] | ["0"-"9"])*>
+}
 
 
 /* For the regular expressions on the right, the token on the left 
 will be returned */
 TOKEN : {
 
-  < IF: "if" >
-| < ELSE: "else" >
-| < LPAREN: "(" >
+      < IF: "if" >
+    | < ELSE: "else" >
+    | < LPAREN: "(" >
+    | < CLASS: "class" >
+    | <AND : "and">
+    | <OR : "or">
+    | <EQUAL : "eq">
+    | <NOT_EQUAL : "ne">
+    | <GREATER_THAN_OR_EQAUL : "ge">
+    | <LESS_THAN_OR_EQAUL : "le">
+    | <GREATER_THAN : ">">
+    | <LESS_THAN : "<">
+    | <ADDITION : "+=">
+    | <SUBTRACTION : "-=">
+    | <PRINT_LINE : "println(" (["a"-"z"] | ["0"-"9"])* ")">
+    | <PRINT : "print(" (["a"-"z"] | ["0"-"9"])* ")">
+    | <BOOLEAN : "bool">
+    | <INT : "integer">
+    | <FOR : "for">
 
 }
 
