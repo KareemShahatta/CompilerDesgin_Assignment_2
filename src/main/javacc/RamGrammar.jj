@@ -1,0 +1,92 @@
+
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  DEBUG_PARSER = false;
+  STATIC = false;
+}
+
+PARSER_BEGIN(RamParser)
+    package compilers;
+    import java.io.FileNotFoundException;
+
+    public class RamParser {
+        public static void main(String[] args) 
+        throws ParseException, TokenMgrError, FileNotFoundException
+        {
+            if (args.length == 0) {
+                RamParser parser = new RamParser( System.in ) ;
+                parser.Goal();
+            } else {
+                java.io.InputStream is = new java.io.FileInputStream(new java.io.File(args[0]));
+                RamParser parser = new RamParser( is ) ;
+                parser.Goal();
+            }       
+        }
+    }
+PARSER_END(RamParser)
+
+
+// Insert a specification of a lexical analysis here. 
+
+/* The regular expressions here will be skipped during lexical analysis. No
+tokens are constructed from the productions that are defined here. */
+/*SKIP : {
+
+
+}*/
+
+
+/* Insert the regular expressions for comments here. Special tokens do not
+interact in the parsing process, but can be accessed from the parser. */
+/*SPECIAL_TOKEN: {
+
+
+}*/
+
+
+/* For the regular expressions on the right, the token on the left 
+will be returned */
+TOKEN : {
+
+  < IF: "if" >
+| < ELSE: "else" >
+| < LPAREN: "(" >
+
+}
+
+
+
+// The following is a simple grammar that will allow you
+// to test the generated lexer. 
+void Goal() :
+{}
+{
+  
+/*
+  ( RamToken() )* <EOF>
+*/
+
+  ( RamToken() {System.out.println("<" + token.kind + " , " + token.image + ">");} )* 
+
+/*
+  ( RamToken() {System.out.println("Kind: " + token.kind + " line " 
+  + token.beginLine + ", column " + token.beginColumn + " - line " + 
+  token.endLine + ", column " + token.endColumn + " : " + token.image);} )* 
+  <EOF>
+*/
+
+/*
+  ( RamToken() {System.out.println("Kind: " + token.kind + " line " 
+  + token.beginLine + ", column " + token.beginColumn + " - line " + 
+  token.endLine + ", column " + token.endColumn + " : " + token.image + 
+  " " + token.specialToken);} )* 
+  <EOF>
+*/
+}
+
+void RamToken():
+{}
+{
+  <IF> | <ELSE> | <LPAREN>
+}
+
