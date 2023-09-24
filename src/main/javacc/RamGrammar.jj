@@ -32,8 +32,10 @@ PARSER_END(RamParser)
 tokens are constructed from the productions that are defined here. */
 SKIP : {
    " "
-   | "\t"
-   | "\n"
+  | "\r\n"
+  | "\r"
+  | "\n"
+  | "\t"
 }
 
 
@@ -41,8 +43,16 @@ SKIP : {
 interact in the parsing process, but can be accessed from the parser. */
 SPECIAL_TOKEN:
 {
-     <MULTILINE_COMMENT: "/*" (["a"-"z"] | ["0"-"9"])* "*/">
-   | <SINGLELINE_COMMENT: "//" (["a"-"z"] | ["0"-"9"])*>
+    //Accepts single style line comment with white spaces, numbers, uppercase letters , and lowercase letters
+   <SINGLELINE_COMMENT: "//" (" " | ["a"-"z"] | ["A"-"Z"] | ["0"-"9"])*>
+
+   //Accepts multiple style line comments with white spaces, numbers, uppercase letters , lowercase letters, and astriks
+   | <MULTILINE_COMMENT: "/*" (" " | "*" | ["a"-"z"] | ["A"-"Z"] | ["0"-"9"])* "*/">
+
+   //Operators?
+   | <DOT: ".">
+   | <COMMA: ",">
+   | <SEMICOLON: ";">
 }
 
 
@@ -53,23 +63,48 @@ TOKEN : {
       < IF: "if" >
     | < ELSE: "else" >
     | < LPAREN: "(" >
+    | < RPAREN: ")" >
+    | < LCUR: "{" >
+    | < RCUR: "}" >
+    | < LBRA: "[" >
+    | < RBRA: "]" >
     | < CLASS: "class" >
+    | < PUBLIC: "public" >
+    | < PRIVATE: "private" >
+    | < STATIC: "static" >
+    | < VOID: "void" >
+    | < MAIN: "main" >
+    | <THIS : "this">
+    | <RETURN : "return">
+    | <BOOLEAN : "bool">
+    | <FALSE : "false">
+    | <TRUE : "true">
     | <AND : "and">
     | <OR : "or">
-    | <EQUAL : "eq">
-    | <NOT_EQUAL : "ne">
-    | <GREATER_THAN_OR_EQAUL : "ge">
-    | <LESS_THAN_OR_EQAUL : "le">
+    | <NOT : "!">
+    | <EQUAL: "=">
+    | <EQUALITY : "==">
+    | <GREATER_THAN_OR_EQUAL : "ge">
+    | <LESS_THAN_OR_EQUAL : "le">
     | <GREATER_THAN : ">">
     | <LESS_THAN : "<">
-    | <ADDITION : "+=">
-    | <SUBTRACTION : "-=">
-    | <PRINT_LINE : "println(" (["a"-"z"] | ["0"-"9"])* ")">
-    | <PRINT : "print(" (["a"-"z"] | ["0"-"9"])* ")">
-    | <BOOLEAN : "bool">
+    | <MULTIPLY : "*">
+    | <SUBTRACTION : "-">
+    | <ADDITION_ASSIGN : "+=">
+    | <SUBTRACTION_ASSIGN : "-=">
     | <INT : "integer">
-    | <FOR : "for">
+    | <DIGIT: ("-")?(["0"-"9"])+>
+    | <ID: (["A"-"Z"]|["a"-"z"])("_" | ["A"-"Z"]|["a"-"z"]|["0"-"9"])* >
+    | <PRINT : "print(" (<DIGIT> | <ID>) ")">
+    | <PRINT_LINE : "println(" (<DIGIT> | <ID>) ")">
 
+
+
+
+
+
+
+//    | <FOR : "for">
 }
 
 
@@ -105,6 +140,11 @@ void Goal() :
 void RamToken():
 {}
 {
-  <IF> | <ELSE> | <LPAREN>
+  <IF> | <ELSE> | <LPAREN> | <RPAREN> | <LCUR> | <RCUR> | <LBRA> | <RBRA>
+  | <CLASS> | <PUBLIC> | <PRIVATE> | <STATIC> | <VOID> | <MAIN> |  <THIS> | <RETURN>
+  | <BOOLEAN> | <FALSE> | <TRUE> | <AND> | <OR> | <NOT>
+  | <EQUAL> | <EQUALITY> | <GREATER_THAN_OR_EQUAL> | <LESS_THAN_OR_EQUAL> | <GREATER_THAN> | <LESS_THAN>
+  | <MULTIPLY> | <SUBTRACTION> | <ADDITION_ASSIGN> | <SUBTRACTION_ASSIGN>
+  | <INT> | <DIGIT> | <ID> | <PRINT> | <PRINT_LINE>
 }
 
